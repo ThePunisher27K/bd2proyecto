@@ -2,31 +2,31 @@ INSERT INTO TipoUsuarios (tipu_uid, tipu_nombre) VALUES (1, 'Actor');
 INSERT INTO TipoUsuarios (tipu_uid, tipu_nombre) VALUES (2, 'Caster');
 
 
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (1, 'Cedula');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (2, 'Nombre Artistico');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (3, 'Nacionalidad');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (4, 'Genero');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (5, 'Fecha de Nacimiento');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (6, 'Etnia');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (7, 'Pais');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (8, 'Telefono 1');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (9, 'Telefono 2');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (10, 'Telefono 3');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (11, 'Whatsapp');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (1, 'Cedula');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (2, 'Nombre Artistico');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (3, 'Nacionalidad');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (4, 'Genero');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (5, 'Fecha de Nacimiento');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (6, 'Etnia');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (7, 'Pais');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (8, 'Telefono 1');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (9, 'Telefono 2');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (10, 'Telefono 3');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (11, 'Whatsapp');
 
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (12, 'Discapacidad');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (13, 'Permiso de trabajo');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (14, 'Altura');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (15, 'Peso');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (16, 'Cintura');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (17, 'Talla de camisa');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (18, 'Talla de Pantalon');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (19, 'Talla de zapatos');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (12, 'Discapacidad');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (13, 'Permiso de trabajo');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (14, 'Altura');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (15, 'Peso');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (16, 'Cintura');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (17, 'Talla de camisa');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (18, 'Talla de Pantalon');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (19, 'Talla de zapatos');
 
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (20, 'Formacion');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (21, 'Profesion');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (22, 'Idiomas');
-INSERT INTO TipoDatoActor (tp_did, tp_nombre) VALUES (23, 'Pdf');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (20, 'Formacion');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (21, 'Profesion');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (22, 'Idiomas');
+INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (23, 'Pdf');
 
 -- Llamar al procedimiento con valores de ejemplo
 BEGIN
