@@ -48,6 +48,10 @@ BEGIN
         InoAcDatAct(1, 5,'25-11-2000');
 END;
 /
+
+
+
+
 BEGIN
 
   InoAcDatAct(1, 3,'Chiricano');
@@ -60,7 +64,19 @@ BEGIN
   IniciarSesion('Ivanb124', 'Contraseña123');
 END;
 /
+BEGIN
+  InoAcDatAct(1, 23,'No generado');
+  InoAcDatAct(2, 23,'No generado');
+  InoAcDatAct(3, 23,'No generado');
 
+END;
+/
+
+
+BEGIN
+  GenerarPDF();
+END;
+/
 
 SET SERVEROUTPUT ON;
 

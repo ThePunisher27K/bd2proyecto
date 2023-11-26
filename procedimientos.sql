@@ -156,3 +156,48 @@ EXCEPTION
     DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
 END IniciarSesion;
 /
+
+
+CREATE OR REPLACE PROCEDURE GenerarPDF AS
+
+  CURSOR usuarios_cursor IS
+    SELECT u.us_id usc_id,u.us_usuario usc_usuario
+    FROM v1_DatActores d
+    JOIN v1_Usuarios u ON d.das_uid = u.us_id
+    WHERE d.das_tpdid = 23 AND d.das_vdato = 'No generado'
+    FOR UPDATE;
+
+  v_vdat1 v1_DatActores.das_vdato%TYPE;
+   v_vdat2 v1_DatActores.das_vdato%TYPE;
+    v_vdat3 v1_DatActores.das_vdato%TYPE;
+     v_vdat4 v1_DatActores.das_vdato%TYPE;
+      v_vdat5 v1_DatActores.das_vdato%TYPE;
+BEGIN
+
+ FOR iteracion IN usuarios_cursor
+  LOOP
+v_vdat1:=condato(iteracion.usc_id,1);
+v_vdat2:=condato(iteracion.usc_id,2);
+v_vdat3:=condato(iteracion.usc_id,3);
+v_vdat4:=condato(iteracion.usc_id,4);
+v_vdat5:=condato(iteracion.usc_id,5);
+if(v_vdat1 != 0 and v_vdat2 != 0 and v_vdat3 != 0 and v_vdat4 != 0 and v_vdat5 != 0) then
+
+    DBMS_OUTPUT.PUT_LINE('PDF Generado para el usuario, ' || iteracion.usc_usuario);
+    UPDATE v1_DatActores
+      SET das_vdato = 'Generado'
+      WHERE das_uid = iteracion.usc_id AND das_tpdid = 23;
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Informacion Faltante para el usuario, ' || iteracion.usc_usuario);
+end if;
+  END LOOP;
+
+  
+  COMMIT;
+EXCEPTION
+  WHEN OTHERS THEN
+
+    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
+    ROLLBACK;
+END GenerarPDF;
+/
