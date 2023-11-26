@@ -1,5 +1,5 @@
-INSERT INTO TipoUsuarios (tipu_uid, tipu_nombre) VALUES (1, 'Actor');
-INSERT INTO TipoUsuarios (tipu_uid, tipu_nombre) VALUES (2, 'Caster');
+INSERT INTO v1_TipoUsuarios (tipu_uid, tipu_nombre) VALUES (1, 'Actor');
+INSERT INTO v1_TipoUsuarios (tipu_uid, tipu_nombre) VALUES (2, 'Caster');
 
 
 INSERT INTO v1_TipoDatActor (tp_did, tp_nombre) VALUES (1, 'Cedula');
@@ -54,5 +54,14 @@ BEGIN
 
 END;
 /
+
+
+BEGIN
+  IniciarSesion('Ivanb124', 'Contraseña123');
+END;
+/
+
+
+SET SERVEROUTPUT ON;
 
 

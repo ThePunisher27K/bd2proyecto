@@ -1,7 +1,8 @@
-select * from TipoUsuarios ;
-SELECT * from TipoDatActor ;
-SELECT * from Usuarios;
-SELECT * from DatosActores;
+select * from v1_TipoUsuarios;
+SELECT * from v1_TipoDatActor;
+SELECT * from v1_Aud_DatoActor;
+SELECT * from v1_Usuarios;
+SELECT * from v1_DatActores;
 
 
 

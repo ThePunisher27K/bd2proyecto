@@ -134,3 +134,25 @@ END InsertarProy;
 /
 
 
+CREATE OR REPLACE PROCEDURE IniciarSesion(
+  p_usuario v1_Usuarios.us_correo%TYPE,
+  p_contra v1_Usuarios.us_contra%TYPE
+) AS
+  v_desicion NUMBER;
+BEGIN
+  -- Verificar si el usuario y la contraseña coinciden
+  SELECT COUNT(*)
+  INTO v_desicion
+  FROM v1_Usuarios
+  WHERE (us_usuario = p_usuario OR us_correo = p_usuario) AND us_contra = p_contra;
+
+  IF v_desicion > 0  THEN
+    DBMS_OUTPUT.PUT_LINE('Inicio de sesión exitoso. Bienvenido');
+    ELSE
+    DBMS_OUTPUT.PUT_LINE('Error: Usuario o contraseña incorrectos.');
+  END IF;
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
+END IniciarSesion;
+/
