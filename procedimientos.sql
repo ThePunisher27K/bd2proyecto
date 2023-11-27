@@ -1,203 +1,268 @@
-CREATE OR REPLACE PROCEDURE InsertarUsuario(
-  p_usuario v1_Usuarios.us_usuario%TYPE,
-  p_correo v1_Usuarios.us_correo%TYPE,
-  p_contra v1_Usuarios.us_contra%TYPE,
-  p_estado v1_Usuarios.us_estado%TYPE,
-  p_tipous v1_Usuarios.us_tipous%TYPE
+CREATE OR REPLACE PROCEDURE INSERTARUSUARIO(
+  P_USUARIO V1_USUARIOS.US_USUARIO%TYPE,
+  P_CORREO V1_USUARIOS.US_CORREO%TYPE,
+  P_CONTRA V1_USUARIOS.US_CONTRA%TYPE,
+  P_ESTADO V1_USUARIOS.US_ESTADO%TYPE,
+  P_TIPOUS V1_USUARIOS.US_TIPOUS%TYPE
 ) AS
-  v_desicion NUMBER;
-  v_sigid v1_Usuarios.us_id%TYPE;
+  V_DESICION NUMBER;
+  V_SIGID    V1_USUARIOS.US_ID%TYPE;
 BEGIN
-
-  -- Verificar si el usuario o el correo ya existen
-  SELECT COUNT(*)
-  INTO v_desicion
-  FROM v1_Usuarios
-  WHERE us_usuario = p_usuario OR us_correo = p_correo;
-
-  IF v_desicion > 0 THEN
+ -- Verificar si el usuario o el correo ya existen
+  SELECT
+    COUNT(*) INTO V_DESICION
+  FROM
+    V1_USUARIOS
+  WHERE
+    US_USUARIO = P_USUARIO
+    OR US_CORREO = P_CORREO;
+  IF V_DESICION > 0 THEN
     DBMS_OUTPUT.PUT_LINE('Error: Usuario o correo ya existen.');
   ELSE
-    -- Inserción si no hay duplicados
-    v_sigid := seq_usuario.NEXTVAL;
-    INSERT INTO v1_Usuarios (us_id, us_usuario, us_correo, us_contra, us_freg, us_estado, us_tipous)
-    VALUES (v_sigid, p_usuario, p_correo, p_contra, SYSDATE, p_estado, p_tipous);
-
+ -- Inserción si no hay duplicados
+    V_SIGID := SEQ_USUARIO.NEXTVAL;
+    INSERT INTO V1_USUARIOS (
+      US_ID,
+      US_USUARIO,
+      US_CORREO,
+      US_CONTRA,
+      US_FREG,
+      US_ESTADO,
+      US_TIPOUS
+    ) VALUES (
+      V_SIGID,
+      P_USUARIO,
+      P_CORREO,
+      P_CONTRA,
+      SYSDATE,
+      P_ESTADO,
+      P_TIPOUS
+    );
     COMMIT;
     DBMS_OUTPUT.PUT_LINE('Usuario insertado correctamente.');
   END IF;
 EXCEPTION
   WHEN OTHERS THEN
-    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
+    DBMS_OUTPUT.PUT_LINE('Error: '
+                         || SQLCODE
+                         || ' - '
+                         || SQLERRM);
     ROLLBACK;
-END InsertarUsuario;
+END INSERTARUSUARIO;
 /
 
-
-CREATE OR REPLACE PROCEDURE InoAcDatAct(
-    p_usid IN v1_Usuarios.us_id%TYPE,
-    p_tipid IN v1_TipoDatActor.tp_did%TYPE,
-    p_vdato IN v1_DatActores.das_vdato%TYPE
-)
-AS
-v_desicion NUMBER;
-v_exisu NUMBER;
-v_existd NUMBER;
-  v_sigid v1_DatActores.das_did%TYPE;
-BEGIN
-SELECT COUNT(*)
-  INTO v_exisu
-  FROM v1_Usuarios
-  WHERE us_id = p_usid and us_tipous = 1;
-
-IF v_exisu > 0 THEN
-SELECT COUNT(*)
-  INTO v_existd
-  FROM v1_TipoDatActor
-  WHERE tp_did = p_tipid;
-
-IF v_existd > 0 THEN
--- Verificar si el dato ya existe para el actor y el tipo de dato
-SELECT COUNT(*)
-  INTO v_desicion
-  FROM v1_DatActores
-  WHERE das_uid = p_usid AND das_tpdid = p_tipid;
-
-    -- Si el dato existe, actualizar
-   IF v_desicion > 0 THEN
-        UPDATE v1_DatActores
-        SET das_vdato = p_vdato
-        WHERE das_uid = p_usid and das_tpdid = p_tipid;
-            DBMS_OUTPUT.PUT_LINE('Dato actualizado correctamente');
-    ELSE
-    v_sigid := seq_dactores.NEXTVAL;
-        -- Si el dato no existe, insertar
-        INSERT INTO v1_DatActores (das_did,das_uid, das_tpdid, das_vdato)
-        VALUES (v_sigid,p_usid,p_tipid,p_vdato);
-            DBMS_OUTPUT.PUT_LINE('Dato insertado correctamente');
-    END IF;
-    ELSE
-    DBMS_OUTPUT.PUT_LINE('El tipo de dato es invalido.');
-    END IF;
-    ELSE
-    DBMS_OUTPUT.PUT_LINE('El usuario no existe o tipo de usuario incorrecto');
-    END IF;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        -- Manejar errores aquí (puedes personalizar según tus necesidades)
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
-        ROLLBACK;
-END InoAcDatAct;
-/
-
-
-
-CREATE OR REPLACE PROCEDURE InsertarProy(
-    p_usid v1_Proy.pro_caid%TYPE,
-  p_titulo v1_Proy.pro_titulo%TYPE,
-  p_cantActores v1_Proy.pro_cantActores%TYPE,
-  p_desc v1_Proy.pro_desc%TYPE,
-  p_fechain v1_Proy.pro_fechain%TYPE,
-  p_fechafi v1_Proy.pro_fechafi%TYPE
-  
+CREATE OR REPLACE PROCEDURE INOACDATACT(
+  P_USID IN V1_USUARIOS.US_ID%TYPE,
+  P_TIPID IN V1_TIPODATACTOR.TP_DID%TYPE,
+  P_VDATO IN V1_DATACTORES.DAS_VDATO%TYPE
 ) AS
-v_exisu NUMBER;
-  v_sigid v1_Proy.pro_id%TYPE;
+  V_DESICION NUMBER;
+  V_EXISU    NUMBER;
+  V_EXISTD   NUMBER;
+  V_SIGID    V1_DATACTORES.DAS_DID%TYPE;
 BEGIN
-
-SELECT COUNT(*)
-  INTO v_exisu
-  FROM v1_Usuarios
-  WHERE us_id = p_usid and us_tipous = 2;
-
-IF v_exisu > 0 THEN
-
-  -- Obtener el siguiente valor de la secuencia para pro_id
- v_sigid := seq_proyecto.NEXTVAL;
-
-  -- Insertar datos en la tabla Proyectos
-  INSERT INTO v1_Proy (pro_id, pro_caid, pro_titulo, pro_cantActores, pro_desc, pro_fechacr, pro_fechain, pro_fechafi)
-  VALUES (v_sigid, p_usid, p_titulo, p_cantActores, p_desc, SYSDATE, p_fechain, p_fechafi);
+  SELECT
+    COUNT(*) INTO V_EXISU
+  FROM
+    V1_USUARIOS
+  WHERE
+    US_ID = P_USID
+    AND US_TIPOUS = 1;
+  IF V_EXISU > 0 THEN
+    SELECT
+      COUNT(*) INTO V_EXISTD
+    FROM
+      V1_TIPODATACTOR
+    WHERE
+      TP_DID = P_TIPID;
+    IF V_EXISTD > 0 THEN
+ -- Verificar si el dato ya existe para el actor y el tipo de dato
+      SELECT
+        COUNT(*) INTO V_DESICION
+      FROM
+        V1_DATACTORES
+      WHERE
+        DAS_UID = P_USID
+        AND DAS_TPDID = P_TIPID;
+ -- Si el dato existe, actualizar
+      IF V_DESICION > 0 THEN
+        UPDATE V1_DATACTORES
+        SET
+          DAS_VDATO = P_VDATO
+        WHERE
+          DAS_UID = P_USID
+          AND DAS_TPDID = P_TIPID;
+        DBMS_OUTPUT.PUT_LINE('Dato actualizado correctamente');
+      ELSE
+        V_SIGID := SEQ_DACTORES.NEXTVAL;
+ -- Si el dato no existe, insertar
+        INSERT INTO V1_DATACTORES (
+          DAS_DID,
+          DAS_UID,
+          DAS_TPDID,
+          DAS_VDATO
+        ) VALUES (
+          V_SIGID,
+          P_USID,
+          P_TIPID,
+          P_VDATO
+        );
+        DBMS_OUTPUT.PUT_LINE('Dato insertado correctamente');
+      END IF;
+    ELSE
+      DBMS_OUTPUT.PUT_LINE('El tipo de dato es invalido.');
+    END IF;
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('El usuario no existe o tipo de usuario incorrecto');
+  END IF;
 
   COMMIT;
-  DBMS_OUTPUT.PUT_LINE('Datos del proyecto insertados correctamente.');
+EXCEPTION
+  WHEN OTHERS THEN
+ -- Manejar errores aquí (puedes personalizar según tus necesidades)
+    DBMS_OUTPUT.PUT_LINE('Error: '
+                         || SQLCODE
+                         || ' - '
+                         || SQLERRM);
+    ROLLBACK;
+END INOACDATACT;
+/
+
+CREATE OR REPLACE PROCEDURE INSERTARPROY(
+  P_USID V1_PROY.PRO_CAID%TYPE,
+  P_TITULO V1_PROY.PRO_TITULO%TYPE,
+  P_CANTACTORES V1_PROY.PRO_CANTACTORES%TYPE,
+  P_DESC V1_PROY.PRO_DESC%TYPE,
+  P_FECHAIN V1_PROY.PRO_FECHAIN%TYPE,
+  P_FECHAFI V1_PROY.PRO_FECHAFI%TYPE
+) AS
+  V_EXISU NUMBER;
+  V_SIGID V1_PROY.PRO_ID%TYPE;
+BEGIN
+  SELECT
+    COUNT(*) INTO V_EXISU
+  FROM
+    V1_USUARIOS
+  WHERE
+    US_ID = P_USID
+    AND US_TIPOUS = 2;
+  IF V_EXISU > 0 THEN
+ -- Obtener el siguiente valor de la secuencia para pro_id
+    V_SIGID := SEQ_PROYECTO.NEXTVAL;
+ -- Insertar datos en la tabla Proyectos
+    INSERT INTO V1_PROY (
+      PRO_ID,
+      PRO_CAID,
+      PRO_TITULO,
+      PRO_CANTACTORES,
+      PRO_DESC,
+      PRO_FECHACR,
+      PRO_FECHAIN,
+      PRO_FECHAFI
+    ) VALUES (
+      V_SIGID,
+      P_USID,
+      P_TITULO,
+      P_CANTACTORES,
+      P_DESC,
+      SYSDATE,
+      P_FECHAIN,
+      P_FECHAFI
+    );
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Datos del proyecto insertados correctamente.');
   ELSE
-      DBMS_OUTPUT.PUT_LINE('El usuario no existe O tipo de usuario incorrecto');
+    DBMS_OUTPUT.PUT_LINE('El usuario no existe O tipo de usuario incorrecto');
   END IF;
 EXCEPTION
   WHEN OTHERS THEN
-    -- Manejar errores aquí (puedes personalizar según tus necesidades)
-    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
+    DBMS_OUTPUT.PUT_LINE('Error: '
+                         || SQLCODE
+                         || ' - '
+                         || SQLERRM);
     ROLLBACK;
-END InsertarProy;
+END INSERTARPROY;
 /
 
-
-CREATE OR REPLACE PROCEDURE IniciarSesion(
-  p_usuario v1_Usuarios.us_correo%TYPE,
-  p_contra v1_Usuarios.us_contra%TYPE
+CREATE OR REPLACE PROCEDURE INICIARSESION(
+  P_USUARIO V1_USUARIOS.US_CORREO%TYPE,
+  P_CONTRA V1_USUARIOS.US_CONTRA%TYPE
 ) AS
-  v_desicion NUMBER;
+  V_DESICION NUMBER;
 BEGIN
-  -- Verificar si el usuario y la contraseña coinciden
-  SELECT COUNT(*)
-  INTO v_desicion
-  FROM v1_Usuarios
-  WHERE (us_usuario = p_usuario OR us_correo = p_usuario) AND us_contra = p_contra;
-
-  IF v_desicion > 0  THEN
+ -- Verificar si el usuario y la contraseña coinciden
+  SELECT
+    COUNT(*) INTO V_DESICION
+  FROM
+    V1_USUARIOS
+  WHERE
+    (US_USUARIO = P_USUARIO
+    OR US_CORREO = P_USUARIO)
+    AND US_CONTRA = P_CONTRA;
+  IF V_DESICION > 0 THEN
     DBMS_OUTPUT.PUT_LINE('Inicio de sesión exitoso. Bienvenido');
-    ELSE
+  ELSE
     DBMS_OUTPUT.PUT_LINE('Error: Usuario o contraseña incorrectos.');
   END IF;
 EXCEPTION
   WHEN OTHERS THEN
-    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
-END IniciarSesion;
+    DBMS_OUTPUT.PUT_LINE('Error: '
+                         || SQLCODE
+                         || ' - '
+                         || SQLERRM);
+END INICIARSESION;
 /
 
-
-CREATE OR REPLACE PROCEDURE GenerarPDF AS
-
-  CURSOR usuarios_cursor IS
-    SELECT u.us_id usc_id,u.us_usuario usc_usuario
-    FROM v1_DatActores d
-    JOIN v1_Usuarios u ON d.das_uid = u.us_id
-    WHERE d.das_tpdid = 23 AND d.das_vdato = 'No generado'
-    FOR UPDATE;
-
-  v_vdat1 v1_DatActores.das_vdato%TYPE;
-   v_vdat2 v1_DatActores.das_vdato%TYPE;
-    v_vdat3 v1_DatActores.das_vdato%TYPE;
-     v_vdat4 v1_DatActores.das_vdato%TYPE;
-      v_vdat5 v1_DatActores.das_vdato%TYPE;
+CREATE OR REPLACE PROCEDURE GENERARPDF AS
+  CURSOR USUARIOS_CURSOR IS
+  SELECT
+    U.US_ID      USC_ID,
+    U.US_USUARIO USC_USUARIO
+  FROM
+    V1_DATACTORES D
+    JOIN V1_USUARIOS U
+    ON D.DAS_UID = U.US_ID
+  WHERE
+    D.DAS_TPDID = 23
+    AND D.DAS_VDATO = 'No generado' FOR UPDATE;
+  V_VDAT1 V1_DATACTORES.DAS_VDATO%TYPE;
+  V_VDAT2 V1_DATACTORES.DAS_VDATO%TYPE;
+  V_VDAT3 V1_DATACTORES.DAS_VDATO%TYPE;
+  V_VDAT4 V1_DATACTORES.DAS_VDATO%TYPE;
+  V_VDAT5 V1_DATACTORES.DAS_VDATO%TYPE;
 BEGIN
-
- FOR iteracion IN usuarios_cursor
-  LOOP
-v_vdat1:=condato(iteracion.usc_id,1);
-v_vdat2:=condato(iteracion.usc_id,2);
-v_vdat3:=condato(iteracion.usc_id,3);
-v_vdat4:=condato(iteracion.usc_id,4);
-v_vdat5:=condato(iteracion.usc_id,5);
-if(v_vdat1 != 0 and v_vdat2 != 0 and v_vdat3 != 0 and v_vdat4 != 0 and v_vdat5 != 0) then
-
-    DBMS_OUTPUT.PUT_LINE('PDF Generado para el usuario, ' || iteracion.usc_usuario);
-    UPDATE v1_DatActores
-      SET das_vdato = 'Generado'
-      WHERE das_uid = iteracion.usc_id AND das_tpdid = 23;
+  FOR ITERACION IN USUARIOS_CURSOR LOOP
+    V_VDAT1:=CONDATO(ITERACION.USC_ID, 1);
+    V_VDAT2:=CONDATO(ITERACION.USC_ID, 2);
+    V_VDAT3:=CONDATO(ITERACION.USC_ID, 3);
+    V_VDAT4:=CONDATO(ITERACION.USC_ID, 4);
+    V_VDAT5:=CONDATO(ITERACION.USC_ID, 5);
+    IF(V_VDAT1 != 0
+    AND V_VDAT2 != 0
+    AND V_VDAT3 != 0
+    AND V_VDAT4 != 0
+    AND V_VDAT5 != 0) THEN
+      DBMS_OUTPUT.PUT_LINE('PDF Generado para el usuario, '
+                           || ITERACION.USC_USUARIO);
+      UPDATE V1_DATACTORES
+      SET
+        DAS_VDATO = 'Generado'
+      WHERE
+        DAS_UID = ITERACION.USC_ID
+        AND DAS_TPDID = 23;
     ELSE
-        DBMS_OUTPUT.PUT_LINE('Informacion Faltante para el usuario, ' || iteracion.usc_usuario);
-end if;
+      DBMS_OUTPUT.PUT_LINE('Informacion Faltante para el usuario, '
+                           || ITERACION.USC_USUARIO);
+    END IF;
   END LOOP;
 
-  
   COMMIT;
 EXCEPTION
   WHEN OTHERS THEN
-
-    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
+    DBMS_OUTPUT.PUT_LINE('Error: '
+                         || SQLCODE
+                         || ' - '
+                         || SQLERRM);
     ROLLBACK;
-END GenerarPDF;
+END GENERARPDF;
 /

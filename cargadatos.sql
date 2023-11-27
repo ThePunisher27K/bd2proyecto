@@ -38,6 +38,13 @@ BEGIN
 END;
 /
 BEGIN
+  InsertarUsuario('CAS11','CAS4311@correo.com','Conña123','Activo',2);
+    InsertarUsuario('FerCAST777','feCASTr@correo.com','ContSAS455','Activo',2);
+      InsertarUsuario('LUISAICAST124','LUISA@correo.com','ContSS67S','Activo',2);
+
+END;
+/
+BEGIN
   InoAcDatAct(1, 1,'8-999-9999');
   InoAcDatAct(1, 2,'Anonimous');
   InoAcDatAct(1, 3,'Chiricano');

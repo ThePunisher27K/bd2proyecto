@@ -1,17 +1,26 @@
-CREATE OR REPLACE TRIGGER Del_Upd_Datactores
-AFTER UPDATE OR DELETE ON v1_DatActores
-FOR EACH ROW
+CREATE OR REPLACE TRIGGER DEL_UPD_DATACTORES AFTER
+    UPDATE OR DELETE ON V1_DATACTORES FOR EACH ROW
 DECLARE
-  v_action VARCHAR2(10);
+    V_ACTION VARCHAR2(10);
 BEGIN
-  IF UPDATING THEN
-    v_action := 'UPDATE';
-  ELSIF DELETING THEN
-    v_action := 'DELETE';
-  END IF;
+    IF UPDATING THEN
+        V_ACTION := 'UPDATE';
+    ELSIF DELETING THEN
+        V_ACTION := 'DELETE';
+    END IF;
 
-  INSERT INTO v1_Aud_DatoActor (audac_id, audac_uid, audac_tpdid, audac_vdato,audac_fecha)
-  VALUES (seq_aud_datoactor.NEXTVAL, :OLD.das_uid, :OLD.das_tpdid, :OLD.das_vdato,SYSDATE);
-
-END Del_Upd_Datactores;
+    INSERT INTO V1_AUD_DATOACTOR (
+        AUDAC_ID,
+        AUDAC_UID,
+        AUDAC_TPDID,
+        AUDAC_VDATO,
+        AUDAC_FECHA
+    ) VALUES (
+        SEQ_AUD_DATOACTOR.NEXTVAL,
+        :OLD.DAS_UID,
+        :OLD.DAS_TPDID,
+        :OLD.DAS_VDATO,
+        SYSDATE
+    );
+END DEL_UPD_DATACTORES;
 /
