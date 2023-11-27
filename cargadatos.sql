@@ -44,6 +44,15 @@ BEGIN
 
 END;
 /
+
+
+BEGIN
+  INSERTARPROY(6,'Comercial Cocacola',10,'comercial navideno de cocacola en el salvador','2023-01-19','2023-01-27');
+ INSERTARPROY(7,'Telenovela',30,'telenovela , comedia romantica ','2023-04-19','2023-10-27');
+ INSERTARPROY(8,'Comercial Pepsi',7,'comercial navideno de pepsi en panama','2023-01-19','2023-01-27');
+END;
+/
+
 BEGIN
   InoAcDatAct(1, 1,'8-999-9999');
   InoAcDatAct(1, 2,'Anonimous');
