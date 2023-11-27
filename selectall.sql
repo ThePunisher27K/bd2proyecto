@@ -1,10 +1,11 @@
 select * from v1_TipoUsuarios;
 SELECT * from v1_TipoDatActor;
 SELECT * from v1_Aud_DatoActor;
+SELECT * from V1_AUD_PROYE;
 SELECT * from v1_Usuarios;
 SELECT * from v1_DatActores;
-SELECT * from v1_Aud_DatoActor;
 SELECT * from V1_PROY;
+SELECT * FROM V1_PRO_SELE;
 
 
 

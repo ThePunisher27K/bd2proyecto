@@ -131,14 +131,12 @@ END INOACDATACT;
 CREATE OR REPLACE PROCEDURE INSERTARPROY(
   P_USID V1_PROY.PRO_CAID%TYPE,
   P_TITULO V1_PROY.PRO_TITULO%TYPE,
-  P_CANTACTORES V1_PROY.PRO_CANTACTORES%TYPE,
   P_DESC V1_PROY.PRO_DESC%TYPE,
-  P_FECHAIN VARCHAR2(20),
-  P_FECHAFI VARCHAR2(20)
+  P_FECHAIN V1_PROY.PRO_FECHAIN%TYPE,
+  P_FECHAFI V1_PROY.PRO_FECHAFI%TYPE
 ) AS
   V_EXISU NUMBER;
   V_SIGID V1_PROY.PRO_ID%TYPE;
-  v_FECHAIN
 BEGIN
   SELECT
     COUNT(*) INTO V_EXISU
@@ -159,16 +157,18 @@ BEGIN
       PRO_DESC,
       PRO_FECHACR,
       PRO_FECHAIN,
-      PRO_FECHAFI
+      PRO_FECHAFI,
+      PRO_ESTADO
     ) VALUES (
       V_SIGID,
       P_USID,
       P_TITULO,
-      P_CANTACTORES,
+      0,
       P_DESC,
       SYSDATE,
       P_FECHAIN,
-      P_FECHAFI
+      P_FECHAFI,
+      'RECLUTANDO'
     );
     COMMIT;
     DBMS_OUTPUT.PUT_LINE('Datos del proyecto insertados correctamente.');
@@ -189,8 +189,9 @@ CREATE OR REPLACE PROCEDURE ASIGNARPROYECTO(
   P_USUARIO_ID V1_USUARIOS.US_ID%TYPE,
   P_PROYECTO_ID V1_PROY.PRO_ID%TYPE
 ) AS
-  V_PROYECTO_EXISTS NUMBER;
-  V_USUARIO_EXISTS  NUMBER;
+  V_PROYECTO_EXISTS   NUMBER;
+  V_USUARIO_EXISTS    NUMBER;
+  V_USUARIOEXISTS_SEL NUMBER;
 BEGIN
  -- Verificar si el usuario existe
   SELECT
@@ -198,7 +199,8 @@ BEGIN
   FROM
     V1_USUARIOS
   WHERE
-    US_ID = P_USUARIO_ID AND US_TIPOUS = 2;
+    US_ID = P_USUARIO_ID
+    AND US_TIPOUS = 1;
   IF V_USUARIO_EXISTS > 0 THEN
  -- Verificar si el proyecto existe
     SELECT
@@ -208,18 +210,30 @@ BEGIN
     WHERE
       PRO_ID = P_PROYECTO_ID;
     IF V_PROYECTO_EXISTS > 0 THEN
+      SELECT
+        COUNT(*) INTO V_USUARIOEXISTS_SEL
+      FROM
+        V1_PRO_SELE
+      WHERE
+        PS_PROID = P_PROYECTO_ID
+        AND PS_ACTID = P_USUARIO_ID;
+      IF V_USUARIOEXISTS_SEL < 1 THEN
  -- Insertar en la tabla V1_PRO_SELE
-      INSERT INTO V1_PRO_SELE (
-        PS_ID,
-        PS_PROID,
-        PS_ACTID,
-        PS_FECHASEL
-      ) VALUES (
-        SEQ_PROSEL.NEXTVAL,
-        P_PROYECTO_ID,
-        P_USUARIO_ID,
-        SYSDATE
-      );
+        INSERT INTO V1_PRO_SELE (
+          PS_ID,
+          PS_PROID,
+          PS_ACTID,
+          PS_FECHASEL
+        ) VALUES (
+          SEQ_PROSEL.NEXTVAL,
+          P_PROYECTO_ID,
+          P_USUARIO_ID,
+          SYSDATE
+        );
+          DBMS_OUTPUT.PUT_LINE('Asignación de proyecto exitosa.');
+      ELSE
+        DBMS_OUTPUT.PUT_LINE('El Actor ya esta asignadoa a este proyecto');
+      END IF;
     ELSE
       DBMS_OUTPUT.PUT_LINE('El proyecto no existe.');
     END IF;
@@ -228,7 +242,7 @@ BEGIN
   END IF;
 
   COMMIT;
-  DBMS_OUTPUT.PUT_LINE('Asignación de proyecto exitosa.');
+
 EXCEPTION
   WHEN OTHERS THEN
     DBMS_OUTPUT.PUT_LINE('Error: '
@@ -237,6 +251,37 @@ EXCEPTION
                          || SQLERRM);
     ROLLBACK;
 END ASIGNARPROYECTO;
+/
+
+CREATE OR REPLACE PROCEDURE Mod_Pro(
+  p_proyecto_id IN V1_PROY.PRO_ID%TYPE,
+  p_nuevo_estado IN V1_PROY.PRO_ESTADO%TYPE
+) AS
+  v_proyecto_exist NUMBER;
+BEGIN
+ 
+    SELECT COUNT(*)
+    INTO v_proyecto_exist
+    FROM V1_PROY
+    WHERE PRO_ID = p_proyecto_id;
+
+    IF v_proyecto_exist = 0 THEN
+      DBMS_OUTPUT.PUT_LINE(' El proyecto no existe.');
+      ELSE
+        -- Actualizar el estado del proyecto
+  UPDATE V1_PROY
+  SET PRO_ESTADO = p_nuevo_estado
+  WHERE PRO_ID = p_proyecto_id;
+
+      COMMIT;
+  DBMS_OUTPUT.PUT_LINE('Estado del proyecto modificado correctamente.');
+    END IF;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
+    ROLLBACK;
+END Mod_Pro;
 /
 
 CREATE OR REPLACE PROCEDURE INICIARSESION(

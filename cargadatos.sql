@@ -47,9 +47,10 @@ END;
 
 
 BEGIN
-  INSERTARPROY(6,'Comercial Cocacola',10,'comercial navideno de cocacola en el salvador','2023-01-19','2023-01-27');
- INSERTARPROY(7,'Telenovela',30,'telenovela , comedia romantica ','2023-04-19','2023-10-27');
- INSERTARPROY(8,'Comercial Pepsi',7,'comercial navideno de pepsi en panama','2023-01-19','2023-01-27');
+  --INSERTARPROY(6,'Comercial Cocacola','comercial navideno de cocacola en el salvador',TO_DATE('2023-01-19', 'YYYY-MM-DD'),TO_DATE('2023-01-27', 'YYYY-MM-DD'));
+  --INSERTARPROY(7,'Telenovela','telenovela , comedia romantica ',TO_DATE('2023-04-19', 'YYYY-MM-DD'),TO_DATE('2023-10-27', 'YYYY-MM-DD'));
+  --INSERTARPROY(8,'Comercial Pepsi','comercial navideno de pepsi en panama',TO_DATE('2023-01-19', 'YYYY-MM-DD'),TO_DATE('2023-01-27', 'YYYY-MM-DD'));
+  INSERTARPROY(8,'Comercial Samsun','comercial navideno de samsung en panama',TO_DATE('2023-01-19', 'YYYY-MM-DD'),TO_DATE('2023-01-27', 'YYYY-MM-DD'));
 END;
 /
 
@@ -64,8 +65,6 @@ BEGIN
   InoAcDatAct(1, 5,'25-11-2000');
 END;
 /
-
-
 
 
 BEGIN
@@ -89,6 +88,18 @@ BEGIN
 
 END;
 /
+
+
+BEGIN
+  ASIGNARPROYECTO(4, 2); 
+END;
+/
+
+BEGIN
+  Mod_Pro(5,'GRABACIONES');
+END;
+/
+
 
 
 BEGIN
