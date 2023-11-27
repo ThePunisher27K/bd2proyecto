@@ -43,9 +43,9 @@ BEGIN
   InoAcDatAct(1, 3,'Chiricano');
   InoAcDatAct(1, 4,'No-Binario');
   InoAcDatAct(1, 5,'25-11-2000');
-    InoAcDatAct(1, 6,'Afro-americano');
-      InoAcDatAct(1, 7,'Panama');
-        InoAcDatAct(1, 5,'25-11-2000');
+  InoAcDatAct(1, 6,'Afro-americano');
+  InoAcDatAct(1, 7,'Panama');
+  InoAcDatAct(1, 5,'25-11-2000');
 END;
 /
 
@@ -68,6 +68,8 @@ BEGIN
   InoAcDatAct(1, 23,'No generado');
   InoAcDatAct(2, 23,'No generado');
   InoAcDatAct(3, 23,'No generado');
+  InoAcDatAct(4, 23,'No generado');
+  InoAcDatAct(5, 23,'No generado');
 
 END;
 /

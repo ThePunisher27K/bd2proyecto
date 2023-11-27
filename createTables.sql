@@ -60,6 +60,7 @@ CREATE TABLE v1_Proy (
  pro_fechacr DATE,
  pro_fechain DATE,
  pro_fechafi DATE
+ pro_estado VARCHAR2(20);
 );
 
 ALTER TABLE v1_Proy
@@ -95,8 +96,10 @@ CREATE TABLE v1_Aud_Proye (
   aup_pro_CantActores NUMBER,
   aup_fechacr DATE,
   aup_fechain DATE,
-  aup_fechafi DATE
+  aup_fechafi DATE,
+  aup_estado VARCHAR2(20)
 );
+
 
 ALTER TABLE v1_Aud_Proye
 ADD CONSTRAINT fk_aupproid
@@ -109,7 +112,11 @@ CREATE TABLE v1_Aud_DatoActor (
   audac_uid NUMBER,
   audac_tpdid NUMBER,
   audac_vdato VARCHAR2(255)
+  audac_fecha DATE
 );
+
+
+CREATE SEQUENCE seq_aud_datoactor START WITH 1 INCREMENT BY 1;
 
 ALTER TABLE v1_Aud_DatoActor
 ADD CONSTRAINT fk_audacuid
